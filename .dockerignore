@@ -1,3 +1,13 @@
 .git
+.github/
+k8s/
+.env
 .gitignore
+.dockerignore
 Dockerfile
+
+# Common local artifacts
+.DS_Store
+bin/
+dist/
+tmp/

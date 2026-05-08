@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-api
+  labels:
+    app: hello-world-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world-api
+  template:
+    metadata:
+      labels:
+        app: hello-world-api
+    spec:
+      containers:
+        - name: hello-world-api
+          image: APP_IMAGE
+          ports:
+            - name: http
+              containerPort: 8097
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 2
+            periodSeconds: 5
