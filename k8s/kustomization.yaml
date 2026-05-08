@@ -9,7 +9,7 @@ resources:
 secretGenerator:
   - name: hello-world-auth
     files:
-      - AUTH_JWT_PRIVATE_KEY_PEM=.secrets/AUTH_JWT_PRIVATE_KEY_PEM
+      - AUTH_JWT_PRIVATE_KEY_PEM=secrets-runtime/AUTH_JWT_PRIVATE_KEY_PEM
 
 generatorOptions:
   disableNameSuffixHash: true

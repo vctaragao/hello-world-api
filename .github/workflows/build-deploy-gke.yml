@@ -147,9 +147,10 @@ jobs:
           DOCKER_TAG: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.event_name == 'issue_comment' && steps.pr.outputs.sha || github.sha }}
         run: |
           set -euo pipefail
-          mkdir -p .secrets
-          trap 'rm -rf .secrets' EXIT
-          printf '%s' "$AUTH_JWT_PRIVATE_KEY_PEM" > .secrets/AUTH_JWT_PRIVATE_KEY_PEM
+          mkdir -p secrets-runtime
+          trap 'rm -rf secrets-runtime' EXIT
+          printf '%s' "$AUTH_JWT_PRIVATE_KEY_PEM" > secrets-runtime/AUTH_JWT_PRIVATE_KEY_PEM
+          test -f secrets-runtime/AUTH_JWT_PRIVATE_KEY_PEM
           kustomize edit set image APP_IMAGE="$DOCKER_TAG"
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/"$DEPLOYMENT_NAME"
