@@ -17,6 +17,13 @@ spec:
       containers:
         - name: hello-world-api
           image: APP_IMAGE
+          resources:
+            requests:
+              cpu: 10m
+              memory: 16Mi
+            limits:
+              cpu: 100m
+              memory: 64Mi
           ports:
             - name: http
               containerPort: 8097
