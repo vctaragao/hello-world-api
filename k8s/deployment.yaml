@@ -17,6 +17,12 @@ spec:
       containers:
         - name: hello-world-api
           image: APP_IMAGE
+          env:
+            - name: AUTH_JWT_PRIVATE_KEY_PEM
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-auth
+                  key: AUTH_JWT_PRIVATE_KEY_PEM
           resources:
             requests:
               cpu: 10m

@@ -1,2 +1,3 @@
 .env
 .worktrees
+k8s/secrets-runtime/

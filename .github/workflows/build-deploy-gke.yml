@@ -31,6 +31,7 @@ jobs:
       IMAGE: ${{ vars.IMAGE }}
       WORKLOAD_IDENTITY_PROVIDER: ${{ vars.WORKLOAD_IDENTITY_PROVIDER }}
       SERVICE_ACCOUNT: ${{ vars.SERVICE_ACCOUNT }}
+      AUTH_JWT_PRIVATE_KEY_PEM: ${{ secrets.AUTH_JWT_PRIVATE_KEY_PEM }}
 
     permissions:
       contents: read
@@ -89,6 +90,11 @@ jobs:
             fi
           done
 
+          if [ -z "$AUTH_JWT_PRIVATE_KEY_PEM" ]; then
+            echo "Missing required GitHub environment secret: AUTH_JWT_PRIVATE_KEY_PEM" >&2
+            missing=1
+          fi
+
           if [ "$missing" -ne 0 ]; then
             echo "Configure the missing values in GitHub Environment vars for this target environment." >&2
             exit 1
@@ -141,6 +147,10 @@ jobs:
           DOCKER_TAG: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.IMAGE }}:${{ github.event_name == 'issue_comment' && steps.pr.outputs.sha || github.sha }}
         run: |
           set -euo pipefail
+          mkdir -p secrets-runtime
+          trap 'rm -rf secrets-runtime' EXIT
+          printf '%s' "$AUTH_JWT_PRIVATE_KEY_PEM" > secrets-runtime/AUTH_JWT_PRIVATE_KEY_PEM
+          test -f secrets-runtime/AUTH_JWT_PRIVATE_KEY_PEM
           kustomize edit set image APP_IMAGE="$DOCKER_TAG"
           kustomize build . | kubectl apply -f -
           kubectl rollout status deployment/"$DEPLOYMENT_NAME"
