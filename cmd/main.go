@@ -3,6 +3,8 @@ package main
 import (
 	"context"
 	"errors"
+	"github.com/vctaragao/hello-world-api/internal/auth"
+	"github.com/vctaragao/hello-world-api/internal/helloworld"
 	"log"
 	"net/http"
 	"os"
@@ -12,18 +14,19 @@ import (
 )
 
 func main() {
-	server := &http.Server{Addr: ":8097"}
+	mux := http.NewServeMux()
+	helloworld.RegisterRoutes(mux)
+	authModule, err := auth.NewModuleFromEnv()
+	if err != nil {
+		log.Fatalf("unable to initialize auth module: %v", err)
+	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("hello-world")
+	authModule.RegisterRoutes(mux)
 
-		w.WriteHeader(http.StatusOK)
-		w.Header().Set("Content-type", "application/json")
-
-		if _, err := w.Write([]byte(`{"message": "Hello-World"}`)); err != nil {
-			log.Printf("reponse err: %v", err)
-		}
-	})
+	server := &http.Server{
+		Addr:    ":8097",
+		Handler: mux,
+	}
 
 	log.Printf("Server listening on port: 8097")
 

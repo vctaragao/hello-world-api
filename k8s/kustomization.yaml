@@ -6,6 +6,14 @@ resources:
   - service.yaml
   - http-route-kong.yaml
 
+secretGenerator:
+  - name: hello-world-auth
+    files:
+      - AUTH_JWT_PRIVATE_KEY_PEM=.secrets/AUTH_JWT_PRIVATE_KEY_PEM
+
+generatorOptions:
+  disableNameSuffixHash: true
+
 images:
   - name: APP_IMAGE
     newName: hello-world-api
