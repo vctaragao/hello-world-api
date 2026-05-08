@@ -4,7 +4,10 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
+  - http-route-auth.yaml
   - http-route-kong.yaml
+  - kong-consumer.yaml
+  - kong-consumer-credential.yaml
 
 secretGenerator:
   - name: hello-world-auth
