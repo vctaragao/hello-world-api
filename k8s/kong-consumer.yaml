@@ -2,6 +2,8 @@ apiVersion: configuration.konghq.com/v1
 kind: KongConsumer
 metadata:
   name: hello-world-client
+  annotations:
+    kubernetes.io/ingress.class: kong
 username: hello-world-client
 credentials:
   - hello-world-client-jwt
