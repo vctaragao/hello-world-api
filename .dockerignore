@@ -5,6 +5,7 @@ k8s/
 .gitignore
 .dockerignore
 Dockerfile
+.worktrees
 
 # Common local artifacts
 .DS_Store
