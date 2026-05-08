@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - deployment.yaml
   - service.yaml
+  - gateway.yaml
+  - http-route.yaml
 
 images:
   - name: APP_IMAGE
