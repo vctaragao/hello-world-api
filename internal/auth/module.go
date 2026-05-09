@@ -84,8 +84,17 @@ func NewModuleFromEnv() (*Module, error) {
 }
 
 func (m *Module) RegisterRoutes(mux *http.ServeMux) {
+	mux.HandleFunc("GET /auth/health", m.handleHealth)
 	mux.HandleFunc("GET /auth/public-key", m.handlePublicKey)
 	mux.HandleFunc("POST /auth/token", m.handleIssueToken)
+}
+
+func (m *Module) handleHealth(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]any{
+		"module":     "auth",
+		"status":     "ok",
+		"configured": m.configured,
+	})
 }
 
 func (m *Module) handlePublicKey(w http.ResponseWriter, r *http.Request) {
