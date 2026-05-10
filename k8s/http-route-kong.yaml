@@ -9,11 +9,13 @@ spec:
     - kind: Gateway
       name: shared-kong-gateway
       namespace: kong
+  hostnames:
+    - api.moraes.lat
   rules:
     - matches:
         - path:
             type: PathPrefix
-            value: /
+            value: /hello-world
       backendRefs:
         - name: hello-world-api
           port: 80

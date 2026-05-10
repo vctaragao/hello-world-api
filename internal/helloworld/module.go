@@ -8,7 +8,9 @@ import (
 
 func RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("GET /", handleHelloWorld)
+	mux.HandleFunc("GET /hello-world", handleHelloWorld)
 	mux.HandleFunc("GET /health", handleHealth)
+	mux.HandleFunc("GET /hello-world/health", handleHealth)
 }
 
 func handleHelloWorld(w http.ResponseWriter, r *http.Request) {
